@@ -3,7 +3,7 @@
 
 Clone the repo:
 ```sh
-git clone git@github.com:kunalkapadia/nodejs-api-kit.git
+git clone git@github.com/dodinhthang/nodejs-api-kit.git
 cd nodejs-api-kit
 ```
 

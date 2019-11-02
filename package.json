@@ -1,7 +1,7 @@
 {
   "name": "nodejs-api-kit",
   "version": "1.0.0",
-  "description": "A Boilerplate application for building REST APIs using express, mongoose ",
+  "description": "A kit application for building REST APIs using express, mongoose ",
   "author": "dothang.hit@gmail.com",
   "main": "index.js",
   "private": false,
