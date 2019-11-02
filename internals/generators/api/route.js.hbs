@@ -1,0 +1,19 @@
+// eslint-disable-next-line new-cap
+const router = require('../../../node_modules/express').Router();
+const {{ name }}Ctrl = require('./{{ name }}.controller');
+
+router
+    .route('/')
+    .get({{ name }}Ctrl.list)
+    .post({{ name }}Ctrl.create)
+    .delete({{ name }}Ctrl.deletedList);
+
+router
+    .route('/:{{ name }}Id')
+    .get({{ name }}Ctrl.get)
+    .delete({{ name }}Ctrl.del)
+    .put({{ name }}Ctrl.update);
+router.param('{{ name }}Id', {{ name }}Ctrl.load);
+
+
+module.exports = router;
