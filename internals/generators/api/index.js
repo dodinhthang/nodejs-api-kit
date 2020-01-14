@@ -45,6 +45,12 @@ module.exports = {
     },
     {
       type: 'confirm',
+      name: 'wantModel',
+      default: true,
+      message: 'Do you want model?',
+    },
+    {
+      type: 'confirm',
       name: 'wantValidate',
       default: true,
       message: 'Do you want validate?',
@@ -54,12 +60,12 @@ module.exports = {
     // Generate index.js and index.test.js
 
     const actions = [
-      {
-        type: 'add',
-        path: '../../server/api/{{name}}/{{name}}.model.js',
-        templateFile: './api/model.js.hbs',
-        abortOnFail: true,
-      },
+      // {
+      //   type: 'add',
+      //   path: '../../server/api/{{name}}/{{name}}.model.js',
+      //   templateFile: './api/model.js.hbs',
+      //   abortOnFail: true,
+      // },
 
     ];
 
@@ -82,11 +88,19 @@ module.exports = {
         abortOnFail: true,
       });
     }
+    if (data.wantModel) {
+      actions.push({
+        type: 'add',
+        path: '../../server/api/{{name}}/{{name}}.model.js',
+        templateFile: './api/model.js.hbs',
+        abortOnFail: true,
+      });
+    }
     if (data.wantValidate) {
       actions.push({
         type: 'add',
-        path: '../../server/api/{{name}}/{{name}}.route.js',
-        templateFile: './api/route.js.hbs',
+        path: '../../server/api/{{name}}/{{name}}.validation.js',
+        templateFile: './api/validation.js.hbs',
         abortOnFail: true,
       });
     }
