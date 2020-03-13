@@ -10,7 +10,11 @@
     "npm": ">=5.6.0",
     "yarn": ">=1.5.1"
   },
-
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test"
+    }
+  },
   "scripts": {
     "start": "nodemon index.js",
     "start:debug": "cross-env DEBUG=nodejs-api-kit:* yarn start",
