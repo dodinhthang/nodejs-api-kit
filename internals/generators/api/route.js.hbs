@@ -6,12 +6,11 @@ router
     .route('/')
     .get({{ name }}Ctrl.list)
     .post({{ name }}Ctrl.create)
-    .delete({{ name }}Ctrl.deletedList);
 
 router
     .route('/:{{ name }}Id')
     .get({{ name }}Ctrl.get)
-    .delete({{ name }}Ctrl.del)
+    .delete({{ name }}Ctrl.remove)
     .put({{ name }}Ctrl.update);
 router.param('{{ name }}Id', {{ name }}Ctrl.load);
 

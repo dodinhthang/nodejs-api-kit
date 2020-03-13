@@ -41,7 +41,7 @@
     "sourceType": "module"
   },
   "extends": [
-    "eslint:recommended",
+    // "eslint:recommended",
     "airbnb-base"
   ]
 }

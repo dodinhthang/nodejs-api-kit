@@ -1,151 +1,106 @@
-/* eslint-disable consistent-return */
-/* eslint-disable camelcase */
-const {{properCase name }} = require('./{{ name }}.model');
-
+const {{ name }} = require('./{{ properCase name }}.model');
 const APIError = require('../../helpers/APIError');
 const httpStatus = require('http-status');
-const STATUS = require('../../variables/CONST_STATUS').STATUS;
 
 /**
- * Load {{ name }} and append to req
- */
-async function load(req, res, next, id) {
-  // eslint-disable-next-line no-param-reassign
-  req.{{ name }} = await {{ properCase name }}.findById(id);
-  if (!req.{{ name }}) {
-    next(
-        new APIError('Item not found', httpStatus.NOT_FOUND, true));
-  }
-  next();
-}
-/**
- * list {{ name }}
- */
-async function list(req, res, next) {
-  try {
-    const { limit = 500, skip = 0, sort, filter } = req.query;
-    const {{ name }}s = await {{ properCase name }}.listBy({ limit, skip, sort, filter });
-    res.json({{ name }}s);
-  } catch (e) {
-    next(e);
-  }
-}
-/**
- * create {{ name }}
- */
-// eslint-disable-next-line consistent-return
-async function create(req, res, next) {
-  try {
-        // eslint-disable-next-line max-len
-    const {
-      name,
-      code
-    } = req.body;
-    const existCode = await {{ properCase  name }}.findOne({ code });
-    if (existCode) {
-      const err = new APIError('Exist {{ name }} with code');
-      return next(err);
-    }
-    const {{ name }} = new {{properCase  name }}({
-        // eslint-disable-next-line max-len
-        name,
-        code,
-      });
-
-    return {{ name }}.save()
-                    .then((saved{{ name }}) => {
-                      if (saved{{ name }}) res.json(saved{{ name }});
-                      else res.transforemer.errorBadRequest('Can not create item');
-                    })
-      .catch((e) => {
-        next(e);
-      });
-  } catch (e) {
-    next(e);
-  }
-}
-/**
- * update {{ name }}
- */
-// eslint-disable-next-line consistent-return
-async function update(req, res, next) {
-  try {
-    const {
-      name,
-      code,
-    } = req.body;
-    const existCode = await {{ properCase name }}.findOne({ code });
-    if (existCode && code !== req.{{ name }}.code) {
-      const err = new APIError('Exist {{ name }} with code');
-      return next(err);
-    }
-    const {{ name }} = req.{{ name }};
-    {{ name }}.name = name;
-    {{ name }}.code = code;
-
-
-    return {{ name }}.save().then(async (result) => {
-      res.json(result);
-    }).catch((err) => {
-      next(err);
-    });
-  } catch (e) {
-    next(e);
-  }
-}
-
-/**
- * Delete costEstimate.
+ * Load {{ properCase name }} and append to req.
+ *  * @property {number} req.query.id - Number of {{ properCase name }}s to be skipped.
  * @returns {{{ name }}}
  */
-function del(req, res, next) {
-  const {{ name }} = req.{{ name }};
-  {{ name }}.status = STATUS.DELETED;
-  {{ name }}.code = '';
-
-  {{ name }}
-  .save()
-  .then(result=>{
-    res.json({
-      success:true,
-      data:result,
-    })
-  }
-  )
-  .catch(e => next(e));
-}
-
-async function deletedList(req, res, next) {
-  try {
-    const { ids } = req.body;
-    const arrDataDelete = ids.map(async ({{ name }}Id) => {
-      const {{ name }} = await {{ properCase name }}.findById({{ name }}Id);
-      if ({{ name }}) {
-        {{ name }}.status = STATUS.DELETED;
-        {{ name }}.code = '';
-        return {{ name }}.save();
+function load(req, res, next, id) {
+  {{ name }}.findOne({
+    where: {
+      id,
+    },
+  })
+    .then(({{ properCase name }}) => {
+      if (!{{ properCase name }}) {
+        return next(new APIError('{{ name }} not exist', httpStatus.BAD_REQUEST, true));
       }
-    });
-    const deletedData = await Promise.all(arrDataDelete);
-    res.json({
-      success: true,
-      data: deletedData,
-    });
-  } catch (e) {
-    //   console.log(e)
-    next(e);
-  }
+      req.{{ properCase name }} = {{ properCase name }}; // eslint-disable-line no-param-reassign
+      return next();
+    })
+    .catch(e => next(e));
 }
+
+/**
+ * Get {{ properCase name }}
+ * @returns {{{ name }}}
+ */
 function get(req, res) {
-  res.json(req.{{ name }});
+  return res.json(req.{{ properCase name }});
+}
+
+/**
+ * Create new {{ properCase name }}
+ * @property {string} req.body.firstName - The username of {{ properCase name }}.
+ * @property {string} req.body.lastName - The mobileNumber of {{ properCase name }}.
+ * @returns {{{ name }}}
+ */
+function create(req, res, next) {
+  const { firstName, lastName, userName, password } = req.body;
+
+  {{ name }}.create({ firstName, lastName, userName, password })
+    .then(jane => res.json(jane))
+    .catch(err => next(err));
+}
+
+/**
+ * Update existing {{ properCase name }}
+ * @property {string} req.body.firstName - The username of {{ properCase name }}.
+ * @property {string} req.body.lastName - The mobileNumber of {{ properCase name }}.
+ * @returns {{{ name }}}
+ */
+function update(req, res, next) {
+  const { firstName, lastName, userName, password } = req.body;
+  const {{ properCase name }} = req.{{ properCase name }};
+
+  {{ properCase name }}.firstName = firstName;
+  {{ properCase name }}.lastName = lastName;
+  {{ properCase name }}.userName = userName;
+  {{ properCase name }}.password = password;
+
+  {{ properCase name }}
+    .save()
+    .then(savedUser => res.json(savedUser))
+    .catch(e => next(e));
+}
+
+/**
+ * Get {{ properCase name }} list.
+ * @property {number} req.query.offset - Number of {{ properCase name }}s to be skipped.
+ * @property {number} req.query.limit - Limit number of {{ properCase name }}s to be returned.
+ * @returns { {{ name }}[] }
+ */
+function list(req, res, next) {
+  const { limit = 50, offset = 0, where, order } = req.query;
+  {{ name }}.findAll({
+    limit: Number(limit),
+    offset: Number(offset),
+    where,
+    order,
+  })
+    .then({{ properCase name }}s => res.json({{ properCase name }}s))
+    .catch(e => next(e));
+}
+
+/**
+ * Delete {{ properCase name }}.
+ * @returns {{{ name }}}
+ */
+function remove(req, res, next) {
+  const {{ properCase name }} = req.{{ properCase name }};
+  {{ properCase name }}
+    .destroy()
+    .then(deletedUser => res.json(deletedUser))
+    .catch(e => next(e));
 }
 
 module.exports = {
-  list,
   load,
+  get,
   create,
   update,
-  del,
-  get,
-  deletedList
+  list,
+  remove,
 };

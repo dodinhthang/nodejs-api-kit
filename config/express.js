@@ -46,6 +46,7 @@ if (config.env === 'development') {
   }));
 }
 
+
 // mount all routes on /api path
 app.use('/api', routes);
 

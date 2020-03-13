@@ -1,78 +1,18 @@
-const Promise = require('bluebird');
-const mongoose = require('mongoose');
-const httpStatus = require('http-status');
-const APIError = require('../../helpers/APIError');
-const STATUS = require('../../variables/CONST_STATUS').STATUS;
+const sequelize = require('../../../config/sequelize');
+const Sequelize = require('sequelize');
 
-const {{  name }}Schema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  code:String,
-  status: {
-    type: Number,
-    enum: [0, 1, 2, 3],
-    default: 1,
+const  {{  name }} = sequelize.define(' {{  name }}', {
+  id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true
   },
 }, {
-  timestamps: true
+  tableName: '{{ properCase name }}s',
+  timestamps: false,
 });
 
-/**
- * Statics
- */
-{{  name }}Schema.statics = {
-  /**
-   * Get {{  name }}
-   *
-   * @param {ObjectId} id - The objectId of {{  name }}.
-   * @returns {Promise<{{  name }}, APIError>}
-   */
-  get(id) {
-    return this.findOne({
-      _id: id,
-      status: STATUS.ACTIVED
-    })
-      .exec()
-      .then(({{  name }}) => {
-        if ({{  name }}) {
-          return {{  name }};
-        }
-        const err = new APIError('No such {{  name }} exists!', httpStatus.NOT_FOUND);
-        return Promise.reject(err);
-      });
-  },
 
-  /**
-   * List {{  name }}s in descending order of 'createdAt' timestamp.
-   *
-   * @param {number} skip - Number of {{  name }}s to be skipped.
-   * @param {number} limit - Limit number of {{  name }}s to be returned.
-   * @returns {Promise<{{  name }}[]>}
-   */
-async     list({
-                skip = 0,
-                limit = 500,
-                sort = {
-                  createdAt: -1
-                },
-                filter = {}
-      }) {
-                /* eslint-disable no-param-reassign */
-        filter.status = STATUS.ACTIVED;
-        const data = await this.find(filter)
-        .sort(sort)
-        .skip(+skip)
-        .limit(+limit)
-          .exec();
-        const count = await this.find(filter).count();
-        return {
-          data,
-          count,
-          limit,
-          skip,
-        };
-      }
-};
+module.exports =  {{  name }};
 
-module.exports = mongoose.model('{{ properCase name }}', {{  name }}Schema);
